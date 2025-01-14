@@ -2,8 +2,8 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    height: 100%;
 }
-
 
 #imageNav{
     height: 38px;
@@ -43,10 +43,80 @@ body, html {
   #coinsContainerBox {
     padding: 20px;
   }
-  
-  .navbar {
-    z-index: 10; /* Ensure the navbar stays on top */
-  }
+
+  /* --------------------------------- Nav bar ----------------------*/
+
+/* Navbar styles */
+.navbar {
+    background-color: #343a40 !important; /* Dark background */
+    border-bottom: 3px solid #ffc107 !important; /* Add a yellow border at the bottom */
+    padding: 1rem 2rem !important; /* Custom padding */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important; /* Add shadow */
+}
+
+.navbar-brand {
+    font-size: 1.5rem !important; /* Adjust font size */
+    color: #ffc107 !important; /* Yellow text */
+    font-weight: bold !important; /* Make text bold */
+}
+
+.navbar-brand:hover {
+    color: #ffffff !important; /* White text on hover */
+}
+
+.navbar-toggler {
+    border: 2px solid #ffc107 !important; /* Yellow border for the toggle button */
+}
+
+.navbar-toggler-icon {
+    background-color: #ffc107 !important; /* Yellow toggle icon */
+}
+
+.navbar-collapse {
+    justify-content: space-between !important; /* Space out items */
+}
+
+.navbar-nav .nav-item .nav-link {
+    font-size: 1rem !important; /* Adjust font size */
+    color: #f8f9fa !important; /* Light text color */
+    margin: 0 0.5rem !important; /* Spacing between links */
+    transition: color 0.3s ease !important; /* Smooth hover effect */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #ffc107 !important; /* Yellow text on hover */
+}
+
+.navbar-nav .nav-item .nav-link.active {
+    color: #ffc107 !important; /* Highlight active link */
+    font-weight: bold !important; /* Make active link bold */
+    text-decoration: underline !important; /* Underline active link */
+}
+
+/* Navbar image styles */
+#imageNav {
+    height: 50px !important; /* Adjust logo height */
+    width: auto !important; /* Maintain aspect ratio */
+    margin-right: 1rem !important; /* Space between logo and links */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .navbar-nav {
+        text-align: center !important; /* Center links on mobile */
+    }
+
+    .navbar-toggler {
+        margin: 0.5rem auto !important; /* Center toggle button */
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem !important; /* Space between nav items */
+    }
+}
+
+
+  /*-----------------------------------------------------------------*/
 
   #selectCurrency{
     width: 74%;
@@ -170,6 +240,12 @@ body, html {
     margin-left: 7px;
 }
 
+.alignDataMiddle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
   /* ---------------------------- Card flip CSS -----------------------*/
 
 
@@ -273,3 +349,4 @@ body, html {
     background-color: green;
   }
   
+  /* ------------------------------------------------------------------------*/

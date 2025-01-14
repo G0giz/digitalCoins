@@ -6,8 +6,10 @@ const searchBox = document.getElementById("searchBox");
 const searchCoinBox = document.getElementById("searchCoinBox");
 const currencyBox = document.getElementById("currencyBox");
 const ctx = document.getElementById('cryptoChart');
-document.getElementById("home").addEventListener("click", showCoins);
-document.getElementById("liveReports").addEventListener("click", showLiveReports);
+const home = document.getElementById("home");
+const liveReports = document.getElementById("liveReports")
+home.addEventListener("click", showCoins);
+liveReports.addEventListener("click", showLiveReports);
 
 // Get the data from local storage if there is no create an empty array.
 let coins = JSON.parse(localStorage.getItem("coins")) || [];
@@ -44,7 +46,7 @@ async function getAllCoins() {
 
 function displayCoins(coins) {
     // Start the container
-    let content = `<div class="container text-center">`;
+    let content = `<div class="container text-center alignDataMiddle">`;
 
     // Initialize index
     let index = 0;
@@ -293,7 +295,7 @@ function unflipCard(id) {
 
 function showCoins() {
     // Show coins container
-    if (!isLiveActive) {
+    if (isLiveActive) {
         cryptoChart.destroy();
         clearInterval(fetchIntervalId);
         fetchIntervalId = null; // Reset the interval ID
@@ -304,13 +306,20 @@ function showCoins() {
 }
 
 function showLiveReports() {
-    // Hide coins container
-    coinsContainerBox.style.display = "none";
-    // Show chart
-    ctx.style.display = "block";
+    // Check if the user chose coins to see there live reports.
+    if (coinsArray.length > 0) {
+        // Hide coins container
+        coinsContainerBox.style.display = "none";
+        // Show chart
+        ctx.style.display = "block";
 
-    // Optionally, initialize or update the chart here
-    renderChart();
+        isLiveActive = !isLiveActive;
+        // Optionally, initialize or update the chart here
+        renderChart();
+    }
+    else {
+        alert("You must choose a coin if you want to see live report");
+    }
 }
 
 // Generate random data for testing (replace this with your fetch logic)
