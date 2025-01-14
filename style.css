@@ -64,12 +64,26 @@ body, html {
     color: #ffffff !important; /* White text on hover */
 }
 
-.navbar-toggler {
-    border: 2px solid #ffc107 !important; /* Yellow border for the toggle button */
+/* Customize the navbar toggler button for a white icon */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
 }
 
-.navbar-toggler-icon {
-    background-color: #ffc107 !important; /* Yellow toggle icon */
+/* Optional: Change icon color on hover */
+.navbar-toggler-icon:hover {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+/* Optional: Adding some padding for better clickability */
+.navbar-toggler {
+    padding: 0.5rem 1rem !important;
+    border: 2px solid;
+}
+
+/* Ensure the navbar toggler is visible on a light background */
+.navbar-toggler.custom-toggler {
+    background-color: transparent !important; /* Transparent background */
+    border: none !important; /* Remove the default border */
 }
 
 .navbar-collapse {
@@ -105,11 +119,6 @@ body, html {
     .navbar-nav {
         text-align: center !important; /* Center links on mobile */
     }
-
-    .navbar-toggler {
-        margin: 0.5rem auto !important; /* Center toggle button */
-    }
-
     .nav-item {
         margin-bottom: 0.5rem !important; /* Space between nav items */
     }
