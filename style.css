@@ -1,0 +1,275 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+#imageNav{
+    height: 38px;
+    width: 30px;
+}
+
+.row{
+    width: 100%;
+    justify-content: space-around;
+}
+
+.col-sm-6{
+    width: 20%;
+}
+
+.card{
+    margin-top: 14px;
+    text-align: left;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  .parallax {
+    /* Set the background image */
+    background-image: url('/assets/Images/coinsBackground.jpeg'); 
+    height: 500px; /* Adjust as needed */
+    background-attachment: fixed; /* The key for parallax */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  #coinsContainerBox {
+    padding: 20px;
+  }
+  
+  .navbar {
+    z-index: 10; /* Ensure the navbar stays on top */
+  }
+
+  #selectCurrency{
+    width: 74%;
+    margin-right: 10px;
+  }
+
+
+  #headerContainer{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+
+  .form-check-input{
+    height: 1.5em !important;
+    width: 3em !important;
+    
+  }
+
+  .form-select{
+    margin-right: 8px;
+  }
+
+  .form-control, .form-select{
+    width: 40% !important;
+  }
+
+  .d-flex{
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+/* Container styling */
+#searchCss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Space between elements */
+    margin: 20px auto;
+    padding: 10px;
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    max-width: 600px; /* Limit the width */
+}
+
+/* Select box styling */
+#currencyBox {
+    width: 100px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border-color 0.3s;
+}
+
+#currencyBox:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none;
+}
+
+/* Search input styling */
+#searchCoinBox {
+    flex-grow: 1; /* Allow it to take available space */
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+#searchCoinBox:focus {
+    border-color: #007bff; /* Highlight border on focus */
+    outline: none;
+}
+
+/* Button styling */
+#searchBox {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#searchBox:hover {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #searchCss {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        gap: 15px;
+    }
+
+    #currencyBox,
+    #searchCoinBox,
+    #searchBox {
+        width: 100%;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 755px) {
+   .mb-4{
+    display: flex;
+    justify-content: center;
+   }
+}
+
+
+#removeCoinsForm{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-check-label{
+    margin-left: 7px;
+}
+
+  /* ---------------------------- Card flip CSS -----------------------*/
+
+
+  /* Container for the card to enable perspective */
+.flip-card {
+    width: 100%; /* Set a fixed width */
+    height: 190px; /* Set a fixed height */
+    margin: 10px; /* Add spacing between cards */
+  }
+  
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s; /* Smooth flip effect */
+    transform-style: preserve-3d;
+  }
+  
+  /* Apply the flip effect when the card has the 'flipped' class */
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  
+  /* Front and back of the card */
+  .flip-card-front, .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Hides the back side when flipped */
+  }
+  
+  /* Front side styling */
+  .flip-card-front {
+    background: white;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space between content and button */
+  }
+  
+  /* Back side styling */
+  .flip-card-back {
+    background: #f8f9fa; /* Light gray */
+    transform: rotateY(180deg);
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push button to the bottom */
+  }
+  
+  /* Ensure the button is at the bottom of the card body */
+  .flip-card-back .card-body,
+  .flip-card-front .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push button to the bottom */
+    height: 100%;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  /* Button styling */
+  .btn-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .btn-info:hover {
+    background-color: #138496;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    margin-top: 10px; /* Add space between the content and the button */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Define common styles for price change */
+.price-change {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    color: white;
+    font-size: 11px;
+    margin-top: 7px;
+  }
+  
+  /* Styles for negative price change */
+  .price-change.negative {
+    background-color: red;
+  }
+  
+  /* Styles for positive price change */
+  .price-change.positive {
+    background-color: green;
+  }
+  
