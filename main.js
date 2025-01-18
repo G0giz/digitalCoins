@@ -89,7 +89,7 @@ function displayCoins(coins) {
                                     </h5>
                                 </div>
                                 <p class="card-text">${coin.name}</p>
-                                <button type="button" id="flipCard" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}'')">Info</button>
+                                <button type="button" id="flipCard" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}')">Info</button>
                             </div>
                         </div>
 
@@ -487,7 +487,7 @@ function displayCoin(coin) {
                                     </h5>
                             </div>
                             <p class="card-text">${coin.name}</p>
-                            <button type="button" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}'')">Info</button>
+                            <button type="button" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}')">Info</button>
                         </div>
                         <!-- Back Side Of the card -->
                         <div class="flip-card-back">

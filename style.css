@@ -157,10 +157,12 @@ html {
 }
 
 /* Mobile styles */
-@media (max-width: 768px) {
+@media(min-width: 300px),(max-width: 1000px) {
     .navbar-nav {
         text-align: center !important;
-        /* Center links on mobile */
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
     }
 
     .nav-item {
