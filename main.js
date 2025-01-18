@@ -8,8 +8,10 @@ const currencyBox = document.getElementById("currencyBox");
 const ctx = document.getElementById('cryptoChart');
 const home = document.getElementById("home");
 const liveReports = document.getElementById("liveReports")
+const about = document.getElementById("about");
 home.addEventListener("click", showCoins);
 liveReports.addEventListener("click", showLiveReports);
+about.addEventListener("click", displayAbout);
 
 // Get the data from local storage if there is no create an empty array.
 let coins = JSON.parse(localStorage.getItem("coins")) || [];
@@ -88,7 +90,7 @@ function displayCoins(coins) {
                                     </h5>
                                 </div>
                                 <p class="card-text">${coin.name}</p>
-                                <button type="button" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}', '${coin.symbol}')">Info</button>
+                                <button type="button" id="flipCard" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}'')">Info</button>
                             </div>
                         </div>
 
@@ -227,6 +229,7 @@ function saveChanges() {
 
 // Function to flip the specific card and show the details.
 async function flipCard(id, name) {
+
     // Get the card and the details container
     const card = document.getElementById(id);
     const detailsContainer = document.getElementById(`details-${id}`);
@@ -303,13 +306,37 @@ function showCoins() {
     coinsContainerBox.style.display = "block";
     // Hide chart
     ctx.style.display = "none";
+    displayCoins(coins);
 }
 
+
+function displayAbout() {
+
+
+    coinsContainerBox.innerHTML = `
+        <div id="aboutText">
+            <p>
+            Welcome to the Digital Coins & Live Reports platform!
+            </p>
+            <p>
+            This page is designed to provide an interactive and user-friendly experience for cryptocurrency enthusiasts.
+            </p>
+            <p>
+            Whether you're exploring various digital currencies or tracking live price changes, this page has all the essential features to keep you informed.
+            </p>
+        </div>
+    `
+}
+
+// Function to display the live report in chart.
 function showLiveReports() {
+
     // Check if the user chose coins to see there live reports.
     if (coinsArray.length > 0) {
         // Hide coins container
         coinsContainerBox.style.display = "none";
+        //Hide the about section
+        about.style.display = "none";
         // Show chart
         ctx.style.display = "block";
 
@@ -336,8 +363,10 @@ function fetchCryptoData() {
 
 // Function to initialize the chart
 function renderChart() {
+
     ctx.getContext("2d");
 
+    //Map through the selected coins and update the data.
     const datasets = coinsArray.map(coin => ({
         label: coin.name,
         data: [coin.current_price],
@@ -346,6 +375,7 @@ function renderChart() {
         fill: false,
     }));
 
+    // Create new chart.
     cryptoChart = new Chart(ctx, {
         type: "line",
         data: {
@@ -406,4 +436,78 @@ function updateCoinsDisplay() {
 
     // Display the filtered list
     displayCoins(newCoinsList);
+}
+
+// Add event to the search button.
+searchBox.addEventListener("click", function (event) {
+    event.preventDefault();
+    displayDesired();
+});
+
+// Function to get the value of the coin and display.
+function displayDesired() {
+    const value = document.getElementById("searchCoinBox").value;
+    const coin = coins.find(coin => coin.id === value);
+    displayCoin(coin);
+}
+
+// Function to display the desired coin (single coin).
+function displayCoin(coin) {
+
+    // Start the container
+    let content = `<div class="container text-center alignDataMiddle">`;
+
+    // Start the first row
+    content += `<div class="row">`;
+
+    // Add the card for the single coin
+    content += `
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card flip-card" id="${coin.id}">
+
+                <!-- Front Side Of the card -->
+                <div class="flip-card-inner">
+                    <!-- Front Side -->
+                    <div class="flip-card-front">
+                        <div class="card-body">
+                            <div id="headerContainer">
+                                <div class="form-check form-switch">
+                                    <input 
+                                        class="form-check-input" 
+                                        type="checkbox" 
+                                        onChange="addCoin('${coin.id}')" 
+                                        role="switch" 
+                                        id="switchCheckToAdd-${coin.id}">
+                                    </div>
+                                    <h5 class="card-title">
+                                        <img src="${coin.image}" alt="${coin.name}" class="me-2" style="width: 24px; height: 24px;">
+                                        ${coin.symbol}
+                                    </h5>
+                            </div>
+                            <p class="card-text">${coin.name}</p>
+                            <button type="button" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}'')">Info</button>
+                        </div>
+                        <!-- Back Side Of the card -->
+                        <div class="flip-card-back">
+                            <div class="card-body">
+                                <p class="card-text" id="details-${coin.id}"></p>
+                                <button type="button" class="btn btn-secondary" onclick="unflipCard('${coin.id}')">Close Info</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    `;
+
+    // Close the row
+    content += `</div>`;
+
+    // Close the container
+    content += `</div>`;
+
+    // Update the coinsContainerBox with the new content
+    coinsContainerBox.innerHTML = content;
+
 }
