@@ -17,7 +17,6 @@ about.addEventListener("click", displayAbout);
 let coins = JSON.parse(localStorage.getItem("coins")) || [];
 let currency = "";
 let coinsArray = [];
-let isLiveActive = false;
 let cryptoChart = null;
 let fetchIntervalId = null;
 
@@ -296,36 +295,39 @@ function unflipCard(id) {
     card.classList.remove('flipped');
 }
 
-function showCoins() {
+
+function disableChart() {
+    cryptoChart.destroy();
+    clearInterval(fetchIntervalId);
+    fetchIntervalId = null; // Reset the interval ID
     // Show coins container
-    if (isLiveActive) {
-        cryptoChart.destroy();
-        clearInterval(fetchIntervalId);
-        fetchIntervalId = null; // Reset the interval ID
-    }
     coinsContainerBox.style.display = "block";
     // Hide chart
     ctx.style.display = "none";
+}
+
+function showCoins() {
+    disableChart();
     displayCoins(coins);
 }
 
 
 function displayAbout() {
-
-
+    disableChart();
     coinsContainerBox.innerHTML = `
-        <div id="aboutText">
-            <p>
-            Welcome to the Digital Coins & Live Reports platform!
-            </p>
-            <p>
-            This page is designed to provide an interactive and user-friendly experience for cryptocurrency enthusiasts.
-            </p>
-            <p>
-            Whether you're exploring various digital currencies or tracking live price changes, this page has all the essential features to keep you informed.
-            </p>
-        </div>
-    `
+            <div id="aboutText">
+                <p>
+                Welcome to the Digital Coins & Live Reports platform!
+                </p>
+                <p>
+                This page is designed to provide an interactive and user-friendly experience for cryptocurrency enthusiasts.
+                </p>
+                <p>
+                Whether you're exploring various digital currencies or tracking live price changes, this page has all the essential features to keep you informed.
+                </p>
+            </div>
+        `
+
 }
 
 // Function to display the live report in chart.
@@ -338,7 +340,6 @@ function showLiveReports() {
         // Show chart
         ctx.style.display = "block";
 
-        isLiveActive = !isLiveActive;
         // Optionally, initialize or update the chart here
         renderChart();
     }
