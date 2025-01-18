@@ -295,9 +295,11 @@ function unflipCard(id) {
     card.classList.remove('flipped');
 }
 
-
+// Function to disable and clean the chart display.
 function disableChart() {
-    cryptoChart.destroy();
+    if (cryptoChart) {
+        cryptoChart.destroy();
+    }
     clearInterval(fetchIntervalId);
     fetchIntervalId = null; // Reset the interval ID
     // Show coins container
@@ -306,12 +308,13 @@ function disableChart() {
     ctx.style.display = "none";
 }
 
+// Function to show the coin (Home in nav bar)
 function showCoins() {
     disableChart();
     displayCoins(coins);
 }
 
-
+//Function to display the about (About in nav bar).
 function displayAbout() {
     disableChart();
     coinsContainerBox.innerHTML = `
@@ -330,7 +333,7 @@ function displayAbout() {
 
 }
 
-// Function to display the live report in chart.
+// Function to display the live report in chart (Live reports in nav bar).
 function showLiveReports() {
 
     // Check if the user chose coins to see there live reports.
