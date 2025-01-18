@@ -335,8 +335,6 @@ function showLiveReports() {
     if (coinsArray.length > 0) {
         // Hide coins container
         coinsContainerBox.style.display = "none";
-        //Hide the about section
-        about.style.display = "none";
         // Show chart
         ctx.style.display = "block";
 
