@@ -127,6 +127,7 @@ function displayCoins(coins) {
 // Function to change the currency in every change of the select.
 function changeCurrency() {
     currency = currencyBox.value;
+    displayCoins(coins);
 }
 
 // Function to add coin after press the toggle button.
@@ -252,7 +253,8 @@ async function flipCard(id, name) {
 
         // Get the current currency and get the value from the array of currencies.
         let currency = currencyBox.value.toLowerCase();
-        currency = coin.market_data.current_price[currency];
+        // .toLocaleString() make it be readable like 1023405 = 1,023,405.
+        currency = coin.market_data.current_price[currency].toLocaleString();
 
         // Get the current value percent of the coin in the market.
         const priceChangePercent = coin.market_data.price_change_percentage_30d;
