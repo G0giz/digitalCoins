@@ -345,7 +345,6 @@ function unflipCard(id) {
 
 // Function to show the coin (Home or the Head Line in nav bar)
 function showCoins() {
-    disableChart();
     displayCoins(coins);
 }
 
