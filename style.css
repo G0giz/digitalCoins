@@ -17,10 +17,6 @@ html {
     text-align: center;
 }
 
-.divider {
-    font-size: x-large;
-    color: #00CCCC;
-}
 
 #imageNav {
     height: 38px;
@@ -76,6 +72,11 @@ html {
     /* Custom padding */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
     /* Add shadow */
+    display: flex;
+    align-items: center;
+    list-style: none; /* Remove default bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
 }
 
 .navbar-brand {
@@ -122,6 +123,9 @@ html {
     /* Space out items */
 }
 
+.nav-item{
+    font-family: navItem;
+}
 .navbar-nav .nav-item .nav-link {
     font-size: 1rem !important;
     /* Adjust font size */
@@ -134,17 +138,43 @@ html {
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #00CCCC !important;
-    /* Yellow text on hover */
+    background-color: #00CCCC !important;
+    /* Bright teal for hover effect */
+    color: #343a40 !important;
+    /* Dark text color on hover for contrast */
+    border-radius: 8px !important;
+    /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    /* Subtle shadow for depth */
+    transition: background-color 0.6s ease, color 0.6s ease !important;
+
 }
 
 .navbar-nav .nav-item .nav-link.active {
-    color: #00CCCC !important;
+    color: #343a40 !important;
     /* Highlight active link */
     font-weight: bold !important;
     /* Make active link bold */
     text-decoration: underline !important;
     /* Underline active link */
+    background-color: #00CCCC !important;
+    /* Slightly lighter gray for contrast */
+    border-radius: 8px !important;
+    /* Rounded corners */
+    padding: 0.5rem 1rem !important;
+    /* Add some padding for better aesthetics */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2) !important;
+    /* Subtle shadow for depth */
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+    /* Smooth transition effects */
+}
+
+/* Divider styling */
+.navbar-nav .divider {
+    color: #00CCCC; /* Match the brand color */
+    font-size: 1.2rem; /* Slightly larger than link text */
+    font-weight: bold; /* Make the divider bold */
+    margin: 0 0.5rem; /* Adjust spacing around divider */
 }
 
 /* Navbar image styles */
@@ -469,6 +499,11 @@ footer {
 @font-face {
     font-family: 'About';
     src: url('assets/fonts/About.otf') format('truetype');
+}
+
+@font-face {
+    font-family: 'navItem';
+    src: url('assets/fonts/Montserrat-Bold.ttf') format('truetype');
 }
 
 

@@ -10,6 +10,7 @@ const home = document.getElementById("home");
 const liveReports = document.getElementById("liveReports")
 const about = document.getElementById("about");
 const headLine = document.getElementById("headLine");
+const searchingBox = document.getElementById("searchingBox");
 
 // On everyChange of the input active a function.
 searchCoinBox.addEventListener("input", updateCoinsDisplay);
@@ -207,9 +208,9 @@ function showModal() {
 }
 
 // Save changes from the modal.
-$(document).ready(function() {
+$(document).ready(function () {
     // Attach click event handler to the Save changes button
-    $('#saveChangesBtn').click(function() {
+    $('#saveChangesBtn').click(function () {
         saveChanges();  // Call the saveChanges function
     });
 });
@@ -251,16 +252,16 @@ function saveChanges() {
 
 // -------------------------------- Flip and Unflip card ------------------------------------//
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Use event delegation for dynamically added elements
-    $('body').on('click', '.btn-info', function() {
+    $('body').on('click', '.btn-info', function () {
         const coinId = $(this).data('id');  // Get coin ID from data-id attribute
         const coinName = $(this).data('name');  // Get coin name from data-name attribute
         flipCard(coinId, coinName);  // Call the flipCard function with appropriate arguments
     });
 
     // Attach event listener to the Close Info button using delegation
-    $('body').on('click', '.btn-secondary', function() {
+    $('body').on('click', '.btn-secondary', function () {
         const coinId = $(this).data('id');  // Get coin ID from data-id attribute
         unflipCard(coinId);  // Call the unflipCard function
     });
@@ -345,12 +346,13 @@ function unflipCard(id) {
 
 // Function to show the coin (Home or the Head Line in nav bar)
 function showCoins() {
+    searchingBox.style.display = 'block';
     displayCoins(coins);
 }
 
 //Function to display the about (About in nav bar).
 function displayAbout() {
-    disableChart();
+    hideSearch();
     coinsContainerBox.innerHTML = `
             <div id="aboutText">
                 <p>
@@ -367,9 +369,32 @@ function displayAbout() {
 
 }
 
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function (event) {
+
+        // Check if the clicked link is the Live Reports tab.
+        // If its live report so don't do anything.
+        if (this.id === 'liveReports') {
+            // Prevent the Live Reports tab from becoming active if coinsArray is empty
+            if (coinsArray.length === 0) {
+                event.preventDefault(); // Prevent default behavior (e.g., navigation)
+                return; // Exit the function
+            }
+        }
+
+        // Remove 'active' class from all links for to be unselected
+        document.querySelectorAll('.nav-link').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Add 'active' class to the clicked link
+        this.classList.add('active');
+    });
+});
 function showLiveReports() {
-    if (!Array.isArray(coinsArray)) {
-        console.error("Invalid coinsArray:", coinsArray);
+    hideSearch();
+    if (coinsArray.length === 0) {
+        alert("You need to choose coins for live reports");
         return;
     }
 
@@ -389,7 +414,7 @@ function showLiveReports() {
         })),
         legend: {
             cursor: "pointer",
-            itemclick: function(e) {
+            itemclick: function (e) {
                 // Toggle the visibility of the series on legend click
                 const series = e.dataSeries;
 
@@ -404,7 +429,7 @@ function showLiveReports() {
     };
 
     // Initialize the chart and store the reference
-    const chart = new CanvasJS.Chart("coinsContainerBox", options); 
+    const chart = new CanvasJS.Chart("coinsContainerBox", options);
 
     // Render the chart
     chart.render();
@@ -541,3 +566,7 @@ function displaySingleCoin(coin) {
     coinsContainerBox.innerHTML = content;
 }
 // -----------------------------------------------------------------------------------//
+
+function hideSearch(){
+    searchingBox.style.display = 'none';
+}
