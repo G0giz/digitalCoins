@@ -9,9 +9,19 @@ const ctx = document.getElementById('cryptoChart');
 const home = document.getElementById("home");
 const liveReports = document.getElementById("liveReports")
 const about = document.getElementById("about");
+const headLine = document.getElementById("headLine");
+
+// On everyChange of the input active a function.
+searchCoinBox.addEventListener("input", updateCoinsDisplay);
+// On home button on nav bar
 home.addEventListener("click", showCoins);
+// On home button on nav bar
+headLine.addEventListener("click", showCoins);
+// On Live reports button on nav bar
 liveReports.addEventListener("click", showLiveReports);
+// On About button on nav bar
 about.addEventListener("click", displayAbout);
+
 
 // Get the data from local storage if there is no create an empty array.
 let coins = JSON.parse(localStorage.getItem("coins")) || [];
@@ -23,7 +33,7 @@ let fetchIntervalId = null;
 // Function to get all the coins and display.
 async function getCoins() {
     try {
-        ctx.style.display = "none";
+        //ctx.style.display = "none";
         if (coins.length === 0) {
             coins = await getAllCoins();
             localStorage.setItem("coins", JSON.stringify(coins));
@@ -44,7 +54,7 @@ async function getAllCoins() {
     return coins;
 }
 
-
+// Function to display all coins
 function displayCoins(coins) {
     // Start the container
     let content = `<div class="container text-center alignDataMiddle">`;
@@ -59,7 +69,7 @@ function displayCoins(coins) {
     // There is also back side of card that on click the info is displayed.
     for (const coin of coins) {
 
-        // Check if the coin is in the coinsArray.
+        // Get the coins that are checked in the coinsArray.
         const isCoinChecked = coinsArray.filter(checkedCoin => checkedCoin.id === coin.id);
         const isChecked = isCoinChecked.length > 0;
 
@@ -89,7 +99,8 @@ function displayCoins(coins) {
                                     </h5>
                                 </div>
                                 <p class="card-text">${coin.name}</p>
-                                <button type="button" id="flipCard" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}')">Info</button>
+                                <button type="button" id="flipCard" class="btn btn-info"data-id="${coin.id}" 
+                                data-name="${coin.name}">Info</button>
                             </div>
                         </div>
 
@@ -97,7 +108,7 @@ function displayCoins(coins) {
                         <div class="flip-card-back">
                             <div class="card-body">
                                 <p class="card-text" id="details-${coin.id}"></p>
-                                <button type="button" class="btn btn-secondary" onclick="unflipCard('${coin.id}')">Close Info</button>
+                                <button type="button" class="btn btn-secondary" data-id="${coin.id}">Close Info</button>
                             </div>
                         </div>
                     </div>
@@ -165,6 +176,8 @@ function getCoinFromArray(id) {
     return returnedCoin;
 }
 
+// -------------------------------- Pop up Modal ------------------------------------//
+
 // Function to show the modal using bootstrap.
 function showModal() {
     const modal = new bootstrap.Modal(document.getElementById('cardModal'));
@@ -192,6 +205,14 @@ function showModal() {
     // Show the modal
     modal.show();
 }
+
+// Save changes from the modal.
+$(document).ready(function() {
+    // Attach click event handler to the Save changes button
+    $('#saveChangesBtn').click(function() {
+        saveChanges();  // Call the saveChanges function
+    });
+});
 
 // Function to save the changes after the save changes button of the pop up model.
 function saveChanges() {
@@ -226,6 +247,26 @@ function saveChanges() {
     displayCoins(coins);
 }
 
+// -----------------------------------------------------------------------------------//
+
+// -------------------------------- Flip and Unflip card ------------------------------------//
+
+$(document).ready(function() {
+    // Use event delegation for dynamically added elements
+    $('body').on('click', '.btn-info', function() {
+        const coinId = $(this).data('id');  // Get coin ID from data-id attribute
+        const coinName = $(this).data('name');  // Get coin name from data-name attribute
+        flipCard(coinId, coinName);  // Call the flipCard function with appropriate arguments
+    });
+
+    // Attach event listener to the Close Info button using delegation
+    $('body').on('click', '.btn-secondary', function() {
+        const coinId = $(this).data('id');  // Get coin ID from data-id attribute
+        unflipCard(coinId);  // Call the unflipCard function
+    });
+});
+
+
 
 // Function to flip the specific card and show the details.
 async function flipCard(id, name) {
@@ -234,6 +275,7 @@ async function flipCard(id, name) {
     const card = document.getElementById(id);
     const detailsContainer = document.getElementById(`details-${id}`);
     // Show rotating spinner inside the card before loading the details
+
     detailsContainer.innerHTML = `
         <div class="loading-spinner">
             <img src="https://media4.giphy.com/media/EIOKH2p0wqgl9KW5fg/giphy.gif" width="100" height="100" alt="Loading..."/>
@@ -297,20 +339,11 @@ function unflipCard(id) {
     card.classList.remove('flipped');
 }
 
-// Function to disable and clean the chart display.
-function disableChart() {
-    if (cryptoChart) {
-        cryptoChart.destroy();
-    }
-    clearInterval(fetchIntervalId);
-    fetchIntervalId = null; // Reset the interval ID
-    // Show coins container
-    coinsContainerBox.style.display = "block";
-    // Hide chart
-    ctx.style.display = "none";
-}
+// -----------------------------------------------------------------------------------//
 
-// Function to show the coin (Home in nav bar)
+// ---------------------------------- Nav bar -----------------------------------------//
+
+// Function to show the coin (Home or the Head Line in nav bar)
 function showCoins() {
     disableChart();
     displayCoins(coins);
@@ -335,90 +368,79 @@ function displayAbout() {
 
 }
 
-// Function to display the live report in chart (Live reports in nav bar).
 function showLiveReports() {
-
-    // Check if the user chose coins to see there live reports.
-    if (coinsArray.length > 0) {
-        // Hide coins container
-        coinsContainerBox.style.display = "none";
-        // Show chart
-        ctx.style.display = "block";
-
-        // Optionally, initialize or update the chart here
-        renderChart();
+    if (!Array.isArray(coinsArray)) {
+        console.error("Invalid coinsArray:", coinsArray);
+        return;
     }
-    else {
-        alert("You must choose a coin if you want to see live report");
-    }
-}
 
-// Generate random data for testing (replace this with your fetch logic)
-function fetchCryptoData() {
-
-    coinsArray = coinsArray.map(coin => ({
-        // Spread operator to create a shallow copy of coin.
-        ...coin,
-        current_price: coin.current_price + (Math.random() * 800 - 1200), // Random fluctuation
-        price_change_percentage_24h: Math.random() * 10 - 1, // Random percentage
-    }));
-    updateChart(); // Update the chart with new data
-}
-
-// Function to initialize the chart
-function renderChart() {
-
-    ctx.getContext("2d");
-
-    //Map through the selected coins and update the data.
-    const datasets = coinsArray.map(coin => ({
-        label: coin.name,
-        data: [coin.current_price],
-        borderColor: getRandomColor(),
-        borderWidth: 2,
-        fill: false,
-    }));
-
-    // Create new chart.
-    cryptoChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["Start"], // Initial label
-            datasets: datasets,
+    // Initialize chart options
+    var options = {
+        title: {
+            text: "Live Report"
         },
+        animationEnabled: true,
+        exportEnabled: true,
+        data: coinsArray.map(coin => ({
+            type: "spline", // Ensure this is set to "spline"
+            name: coin.name,
+            showInLegend: true,
+            dataPoints: [{ x: 0, y: coin.current_price }],
+            visible: true  // Set the initial visibility to true
+        })),
+        legend: {
+            cursor: "pointer",
+            itemclick: function(e) {
+                // Toggle the visibility of the series on legend click
+                const series = e.dataSeries;
+
+                // If the series is currently visible, hide it, otherwise show it
+                series.visible = !series.visible;
+
+                // Re-render the chart to apply changes
+                e.chart.render();
+                return false; // Prevent default legend click behavior
+            }
+        }
+    };
+
+    // Initialize the chart and store the reference
+    const chart = new CanvasJS.Chart("coinsContainerBox", options); 
+
+    // Render the chart
+    chart.render();
+
+    // Update chart data points every 4 seconds
+    setInterval(() => updateChartData(chart), 4000);
+}
+
+// Function to update the chart data
+function updateChartData(chart) {
+    coinsArray.forEach((coin, index) => {
+        const series = chart.options.data[index];
+        const lastPoint = series.dataPoints[series.dataPoints.length - 1];
+
+        // Generate a new x value based on the last x value
+        const newX = lastPoint.x + 1;
+
+        // Generate a new y value with a higher progression
+        const upwardTrend = 2; // Fixed upward trend
+        const randomFluctuation = (Math.random() - 0.5) * 20; // Allow for larger random fluctuation
+        const newY = Math.max(0, lastPoint.y + upwardTrend + randomFluctuation);
+
+        // Update the current price in the global coinsArray
+        coinsArray[index].current_price = newY;
+
+        // Add the new data point
+        series.dataPoints.push({ x: newX, y: newY });
     });
 
-    // Start fetching data every 4 seconds
-    fetchIntervalId = setInterval(fetchCryptoData, 4000);
+    chart.render(); // Re-render the chart with updated data
 }
 
-// Function to update the chart
-function updateChart() {
+// -----------------------------------------------------------------------------------//
 
-    if (cryptoChart) {
-        // Add new data points for each dataset
-        cryptoChart.data.labels.push(new Date().toLocaleTimeString()); // Add timestamp
-        cryptoChart.data.datasets.forEach((dataset, index) => {
-            // Update with new price
-            dataset.data.push(coinsArray[index].current_price);
-        });
-
-        cryptoChart.update(); // Refresh the chart
-    }
-}
-
-// Function to generate random colors for each dataset
-function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-
-    return `rgb(${r},${g},${b})`;
-}
-
-
-// On everyChange of the input active a function.
-document.getElementById("searchCoinBox").addEventListener("input", updateCoinsDisplay);
+// -------------------------------------- Search And Currency -------------------------------------//
 
 // After every change of the search text the display is changed.
 function updateCoinsDisplay() {
@@ -452,11 +474,14 @@ searchBox.addEventListener("click", function (event) {
 function displayDesired() {
     const value = document.getElementById("searchCoinBox").value;
     const coin = coins.find(coin => coin.id === value);
-    displayCoin(coin);
+    displaySingleCoin(coin);
 }
 
 // Function to display the desired coin (single coin).
-function displayCoin(coin) {
+function displaySingleCoin(coin) {
+    // Check if the coin is in the coinsArray
+    const isCoinChecked = coinsArray.filter(checkedCoin => checkedCoin.id === coin.id);
+    const isChecked = isCoinChecked.length > 0; // If the coin is checked, set it to true
 
     // Start the container
     let content = `<div class="container text-center alignDataMiddle">`;
@@ -464,7 +489,7 @@ function displayCoin(coin) {
     // Start the first row
     content += `<div class="row">`;
 
-    // Add the card for the single coin
+    // Add the card for the single coin (same structure as in displayCoins)
     content += `
         <div class="col-lg-3 col-md-6 mb-4">
             <div class="card flip-card" id="${coin.id}">
@@ -481,26 +506,28 @@ function displayCoin(coin) {
                                         type="checkbox" 
                                         onChange="addCoin('${coin.id}')" 
                                         role="switch" 
-                                        id="switchCheckToAdd-${coin.id}">
-                                    </div>
-                                    <h5 class="card-title">
-                                        <img src="${coin.image}" alt="${coin.name}" class="me-2" style="width: 24px; height: 24px;">
-                                        ${coin.symbol}
-                                    </h5>
+                                        id="switchCheckToAdd-${coin.id}" 
+                                        ${isChecked ? 'checked' : ''}> <!-- If the coin is checked, keep the checkbox checked -->
+                                </div>
+                                <h5 class="card-title">
+                                    <img src="${coin.image}" alt="${coin.name}" class="me-2" style="width: 24px; height: 24px;">
+                                    ${coin.symbol}
+                                </h5>
                             </div>
                             <p class="card-text">${coin.name}</p>
-                            <button type="button" class="btn btn-info" onclick="flipCard('${coin.id}', '${coin.name}')">Info</button>
+                            <button type="button" id="flipCard" class="btn btn-info" data-id="${coin.id}" 
+                            data-name="${coin.name}">Info</button>
                         </div>
-                        <!-- Back Side Of the card -->
-                        <div class="flip-card-back">
-                            <div class="card-body">
-                                <p class="card-text" id="details-${coin.id}"></p>
-                                <button type="button" class="btn btn-secondary" onclick="unflipCard('${coin.id}')">Close Info</button>
-                            </div>
+                    </div>
+
+                    <!-- Back Side Of the card -->
+                    <div class="flip-card-back">
+                        <div class="card-body">
+                            <p class="card-text" id="details-${coin.id}"></p>
+                            <button type="button" class="btn btn-secondary" data-id="${coin.id}">Close Info</button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     `;
@@ -513,5 +540,5 @@ function displayCoin(coin) {
 
     // Update the coinsContainerBox with the new content
     coinsContainerBox.innerHTML = content;
-
 }
+// -----------------------------------------------------------------------------------//

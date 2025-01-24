@@ -10,6 +10,7 @@ html {
     font-family: HeadLine;
     color: #00CCCC;
     text-decoration: underline;
+    cursor: pointer;
 }
 
 #pageHeadLine {
@@ -346,8 +347,7 @@ footer {
 }
 
 /* ---------------------------- Card flip CSS -----------------------*/
-
-.card-text{
+.card-text {
     font-weight: bold;
     font-size: large;
 }
@@ -355,20 +355,18 @@ footer {
 /* Container for the card to enable perspective */
 .flip-card {
     width: 100%;
-    /* Set a fixed width */
     height: 190px;
-    /* Set a fixed height */
     margin: 10px;
-    /* Add spacing between cards */
+    perspective: 1000px; /* Add perspective for the 3D effect */
 }
 
+/* Ensures the content will rotate smoothly and properly */
 .flip-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
     transition: transform 0.6s;
-    /* Smooth flip effect */
-    transform-style: preserve-3d;
+    transform-style: preserve-3d; /* Ensure the children elements preserve 3D */
 }
 
 /* Apply the flip effect when the card has the 'flipped' class */
@@ -382,10 +380,9 @@ footer {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
+    backface-visibility: hidden; /* Hide the back side when flipped */
     background-color: #202020 !important;
     color: white;
-    /* Hides the back side when flipped */
 }
 
 /* Front side styling */
@@ -396,20 +393,17 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Space between content and button */
 }
 
 /* Back side styling */
 .flip-card-back {
     background: #f8f9fa;
-    /* Light gray */
-    transform: rotateY(180deg);
+    transform: rotateY(180deg); /* Rotate back side */
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Push button to the bottom */
 }
 
 /* Ensure the button is at the bottom of the card body */
@@ -418,7 +412,6 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Push button to the bottom */
     height: 100%;
     font-size: 14px;
     text-align: center;
@@ -438,7 +431,6 @@ footer {
     background-color: #6c757d;
     color: white;
     margin-top: 10px;
-    /* Add space between the content and the button */
 }
 
 .btn-secondary:hover {
@@ -465,6 +457,7 @@ footer {
     background-color: green;
 }
 
+
 /* ------------------------------------------------------------------------*/
 
 /* ------------------------------ Fonts -----------------------------------*/
@@ -476,4 +469,17 @@ footer {
 @font-face {
     font-family: 'About';
     src: url('assets/fonts/About.otf') format('truetype');
+}
+
+
+@media (min-width: 521px) and (max-width: 755px) {
+    .canvasjs-chart-canvas {
+        height: 350px !important;
+    }
+}
+
+@media (min-width: 300px) and (max-width: 520px) {
+    .canvasjs-chart-canvas {
+        height: 250px !important;
+    }
 }
