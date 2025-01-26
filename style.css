@@ -507,14 +507,8 @@ footer {
 }
 
 
-@media (min-width: 521px) and (max-width: 755px) {
+@media (min-width: 300px) and (max-width: 755px) {
     .canvasjs-chart-canvas {
         height: 350px !important;
-    }
-}
-
-@media (min-width: 300px) and (max-width: 520px) {
-    .canvasjs-chart-canvas {
-        height: 250px !important;
     }
 }

@@ -48,8 +48,7 @@ async function getCoins() {
 
 // Function to return the coins data from the API.
 async function getAllCoins() {
-    // const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
-    const url = "coins.json";
+    const url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd";
     const response = await axios.get(url);
     const coins = response.data;
     return coins;
@@ -166,7 +165,7 @@ async function addCoin(id) {
             showModal();
         }
     } catch (error) {
-        throw new Error("Error fetching coin:", error.message); // Log error details
+        throw new Error("Error fetching coin:", error.message); 
     }
 
 }
@@ -211,7 +210,8 @@ function showModal() {
 $(document).ready(function () {
     // Attach click event handler to the Save changes button
     $('#saveChangesBtn').click(function () {
-        saveChanges();  // Call the saveChanges function
+        // Call the saveChanges function
+        saveChanges();  
     });
 });
 
@@ -252,18 +252,24 @@ function saveChanges() {
 
 // -------------------------------- Flip and Unflip card ------------------------------------//
 
+// JQuery for flip and unflip the cards.
 $(document).ready(function () {
     // Use event delegation for dynamically added elements
     $('body').on('click', '.btn-info', function () {
-        const coinId = $(this).data('id');  // Get coin ID from data-id attribute
-        const coinName = $(this).data('name');  // Get coin name from data-name attribute
-        flipCard(coinId, coinName);  // Call the flipCard function with appropriate arguments
+        // Get coin ID from data-id attribute
+        const coinId = $(this).data('id');  
+        // Get coin name from data-name attribute
+        const coinName = $(this).data('name');  
+        // Call the flipCard function with appropriate arguments
+        flipCard(coinId, coinName);  
     });
 
     // Attach event listener to the Close Info button using delegation
     $('body').on('click', '.btn-secondary', function () {
-        const coinId = $(this).data('id');  // Get coin ID from data-id attribute
-        unflipCard(coinId);  // Call the unflipCard function
+        // Get coin ID from data-id attribute
+        const coinId = $(this).data('id');  
+        // Call the unflipCard function
+        unflipCard(coinId);  
     });
 });
 
@@ -285,7 +291,8 @@ async function flipCard(id, name) {
 
     // Add CSS for rotating spinner
     const spinner = document.querySelector(`#details-${id} .loading-spinner img`);
-    spinner.style.animation = "spin 2s linear infinite"; // Apply rotation animation
+    // Apply rotation animation
+    spinner.style.animation = "spin 2s linear infinite"; 
 
     try {
 
@@ -393,8 +400,10 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-
+// Function to show the live reports on chart.
 function showLiveReports() {
+
+    // Hide the search box.
     hideSearch();
     if (coinsArray.length === 0) {
         alert("You need to choose coins for live reports");
@@ -443,6 +452,8 @@ function showLiveReports() {
 
 // Function to update the chart data
 async function updateChartData(chart) {
+
+    // Wait for data from the api.
     const priceData = await fetchCoinPrices();
 
     if (!priceData) {
@@ -477,7 +488,7 @@ async function updateChartData(chart) {
     chart.render(); // Re-render the chart with updated data
 }
 
-
+// Function to get the current price from api.
 async function fetchCoinPrices() {
 
     // Build the API URL dynamically based on coinsArray
@@ -491,11 +502,13 @@ async function fetchCoinPrices() {
         if (!response.ok) {
             throw new Error(`API error: ${response.statusText}`);
         }
-        const priceData = await response.json();        
-        return priceData; // Return the fetched data
+        const priceData = await response.json();   
+        // Return the fetched data     
+        return priceData; 
     } catch (error) {
         alert("Error fetching coin prices:", error.message);
-        return null; // Return null on error
+        // Return null on error
+        return null; 
     }
 }
 
@@ -605,6 +618,7 @@ function displaySingleCoin(coin) {
 }
 // -----------------------------------------------------------------------------------//
 
+// Function to hide the search box.
 function hideSearch(){
     searchingBox.style.display = 'none';
 }
