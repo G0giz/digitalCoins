@@ -26,7 +26,7 @@ about.addEventListener("click", displayAbout);
 
 // Get the data from local storage if there is no create an empty array.
 let coins = JSON.parse(localStorage.getItem("coins")) || [];
-let currency = "";
+let currency = "USD";
 let coinsArray = [];
 let cryptoChart = null;
 let fetchIntervalId = null;
@@ -369,6 +369,7 @@ function displayAbout() {
 
 }
 
+// Add event to the links in the nav bar.
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function (event) {
 
@@ -391,6 +392,8 @@ document.querySelectorAll('.nav-link').forEach(link => {
         this.classList.add('active');
     });
 });
+
+
 function showLiveReports() {
     hideSearch();
     if (coinsArray.length === 0) {
@@ -439,28 +442,63 @@ function showLiveReports() {
 }
 
 // Function to update the chart data
-function updateChartData(chart) {
+async function updateChartData(chart) {
+    const priceData = await fetchCoinPrices();
+
+    if (!priceData) {
+        console.warn("Failed to update chart due to fetch error.");
+        return;
+    }
+
     coinsArray.forEach((coin, index) => {
-        const series = chart.options.data[index];
-        const lastPoint = series.dataPoints[series.dataPoints.length - 1];
+        const currentPrice = priceData[coin.symbol.toUpperCase()]?.USD;  // Ensure USD is fetched correctly
 
-        // Generate a new x value based on the last x value
-        const newX = lastPoint.x + 1;
+        if (currentPrice) {
+            const series = chart.options.data[index];
+            const lastPoint = series.dataPoints[series.dataPoints.length - 1];
 
-        // Generate a new y value with a higher progression
-        const upwardTrend = 2; // Fixed upward trend
-        const randomFluctuation = (Math.random() - 0.5) * 20; // Allow for larger random fluctuation
-        const newY = Math.max(0, lastPoint.y + upwardTrend + randomFluctuation);
+            // Add new data point with incremented x-value
+            const newX = lastPoint.x + 1;
+            const newY = currentPrice;
 
-        // Update the current price in the global coinsArray
-        coinsArray[index].current_price = newY;
+            // Update global coin price (optional)
+            coin.current_price = newY;
 
-        // Add the new data point
-        series.dataPoints.push({ x: newX, y: newY });
+            // Add the new data point to the series
+            series.dataPoints.push({ x: newX, y: newY });
+
+            // Limit data points for performance (optional)
+            if (series.dataPoints.length > 50) {
+                series.dataPoints.shift();
+            }
+        }
     });
 
     chart.render(); // Re-render the chart with updated data
 }
+
+
+async function fetchCoinPrices() {
+
+    // Build the API URL dynamically based on coinsArray
+    // The symbols to upper case to match the url.
+    const symbols = coinsArray.map(coin => coin.symbol.toUpperCase()).join(",");
+    const apiUrl = `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=${currency}`;
+
+    try {
+        // Fetch the latest prices from the API
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`API error: ${response.statusText}`);
+        }
+        const priceData = await response.json();        
+        return priceData; // Return the fetched data
+    } catch (error) {
+        alert("Error fetching coin prices:", error.message);
+        return null; // Return null on error
+    }
+}
+
 
 // -----------------------------------------------------------------------------------//
 
