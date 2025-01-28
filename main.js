@@ -54,8 +54,20 @@ async function getAllCoins() {
     return coins;
 }
 
-// Function to display all coins
-function displayCoins(coins) {
+// Function to display coins with pagination.
+// Initiate the page to 1 in the beginning and in every page will be 12 cards.
+function displayCoins(coins, page = 1, coinsPerPage = 12) {
+
+    // Calculate the total number of pages
+    const totalPages = Math.ceil(coins.length / coinsPerPage);
+
+    // Ensure the page is within valid bounds
+    if (page < 1) page = 1;
+
+    // Calculate the start and end index for the current page
+    const startIndex = (page - 1) * coinsPerPage;
+    const endIndex = startIndex + coinsPerPage;
+    const coinsToDisplay = coins.slice(startIndex, endIndex);
 
     // Start the container
     let content = `<div class="container text-center alignDataMiddle">`;
@@ -66,11 +78,9 @@ function displayCoins(coins) {
     // Start the first row
     content += `<div class="row">`;
 
-    // Loop through the coins and create rows of 4 coins.
-    // There is also back side of card that on click the info is displayed.
-    for (const coin of coins) {
-
-        // Get the coins that are checked in the coinsArray.
+    // Loop through the coins for the current page
+    for (const coin of coinsToDisplay) {
+        // Get the coins that are checked in the coinsArray
         const isCoinChecked = coinsArray.filter(checkedCoin => checkedCoin.id === coin.id);
         const isChecked = isCoinChecked.length > 0;
 
@@ -100,7 +110,7 @@ function displayCoins(coins) {
                                     </h5>
                                 </div>
                                 <p class="card-text">${coin.name}</p>
-                                <button type="button" id="flipCard" class="btn btn-info"data-id="${coin.id}" 
+                                <button type="button" id="flipCard" class="btn btn-info" data-id="${coin.id}" 
                                 data-name="${coin.name}">Info</button>
                             </div>
                         </div>
@@ -121,7 +131,7 @@ function displayCoins(coins) {
         index++;
 
         // Close the row and start a new one after every 4 cards
-        if (index % 4 === 0 && index < coins.length) {
+        if (index % 4 === 0 && index < coinsToDisplay.length) {
             content += `</div><div class="row">`;
         }
     }
@@ -129,9 +139,25 @@ function displayCoins(coins) {
     // Close the last row
     content += `</div>`;
 
+    // Add pagination controls
+    // If the page is greater than 1 add the previous button.
+    content += `<div class="pagination-controls mt-4">`;
+    if (page > 1) {
+        content += `<button class="btn btn-primary me-2" onclick="displayCoins(coins, ${page - 1})">Previous</button>`;
+    }
+    // The text of the pages.
+    content += `<span class="me-2">Page ${page} of ${totalPages}</span>`;
+    // If the page is less than the totalPages so add the next button.
+    // When you will get to the last page there wont be that button.
+    if (page < totalPages) {
+        content += `<button class="btn btn-primary" onclick="displayCoins(coins, ${page + 1})">Next</button>`;
+    }
+    content += `</div>`;
+
     // Close the container
     content += `</div>`;
 
+    // Update the container with the new content
     coinsContainerBox.innerHTML = content;
 }
 
@@ -366,15 +392,15 @@ function displayAbout() {
     hideSearch();
     coinsContainerBox.innerHTML = `
             <div id="aboutText">
-                <p>
+                <h1>
                 Welcome to the Digital Coins & Live Reports platform!
-                </p>
-                <p>
+                </h1>
+                <h3>
                 This page is designed to provide an interactive and user-friendly experience for cryptocurrency enthusiasts.
-                </p>
-                <p>
+                </h3>
+                <h3>
                 Whether you're exploring various digital currencies or tracking live price changes, this page has all the essential features to keep you informed.
-                </p>
+                </h3>
             </div>
         `
 
