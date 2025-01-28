@@ -56,6 +56,7 @@ async function getAllCoins() {
 
 // Function to display all coins
 function displayCoins(coins) {
+
     // Start the container
     let content = `<div class="container text-center alignDataMiddle">`;
 
@@ -206,14 +207,7 @@ function showModal() {
     modal.show();
 }
 
-// Save changes from the modal.
-$(document).ready(function () {
-    // Attach click event handler to the Save changes button
-    $('#saveChangesBtn').click(function () {
-        // Call the saveChanges function
-        saveChanges();  
-    });
-});
+
 
 // Function to save the changes after the save changes button of the pop up model.
 function saveChanges() {
@@ -250,30 +244,40 @@ function saveChanges() {
 
 // -----------------------------------------------------------------------------------//
 
+// ------------------------------- jQuery IIFE-------------------------------------------//
+
+(function () {
+    // Ensure the code executes when the DOM is fully loaded
+    $(document).ready(function () {
+        // Event delegation for dynamically added elements
+        $('body').on('click', '.btn-info', function () {
+            // Get coin ID and name from data attributes
+            const coinId = $(this).data('id');  
+            const coinName = $(this).data('name');  
+            // Call the flipCard function with appropriate arguments
+            flipCard(coinId, coinName);  
+        });
+
+        // Event listener for the Close Info button
+        $('body').on('click', '.btn-secondary', function () {
+            // Get coin ID from data-id attribute
+            const coinId = $(this).data('id');  
+            // Call the unflipCard function
+            unflipCard(coinId);  
+        });
+
+        // Save changes from the modal
+        $('#saveChangesBtn').click(function () {
+            // Call the saveChanges function
+            saveChanges();  
+        });
+    });
+})();
+
+// ------------------------------------------------------------------------------------------//
+
+
 // -------------------------------- Flip and Unflip card ------------------------------------//
-
-// JQuery for flip and unflip the cards.
-$(document).ready(function () {
-    // Use event delegation for dynamically added elements
-    $('body').on('click', '.btn-info', function () {
-        // Get coin ID from data-id attribute
-        const coinId = $(this).data('id');  
-        // Get coin name from data-name attribute
-        const coinName = $(this).data('name');  
-        // Call the flipCard function with appropriate arguments
-        flipCard(coinId, coinName);  
-    });
-
-    // Attach event listener to the Close Info button using delegation
-    $('body').on('click', '.btn-secondary', function () {
-        // Get coin ID from data-id attribute
-        const coinId = $(this).data('id');  
-        // Call the unflipCard function
-        unflipCard(coinId);  
-    });
-});
-
-
 
 // Function to flip the specific card and show the details.
 async function flipCard(id, name) {
@@ -376,31 +380,43 @@ function displayAbout() {
 
 }
 
+// Store the last active tab
+let previousActiveTab = "home"; // Default to "home" when the page loads
+
 // Add event to the links in the nav bar.
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function (event) {
-
         // Check if the clicked link is the Live Reports tab.
-        // If its live report so don't do anything.
         if (this.id === 'liveReports') {
             // Prevent the Live Reports tab from becoming active if coinsArray is empty
             if (coinsArray.length === 0) {
-                event.preventDefault(); // Prevent default behavior (e.g., navigation)
-                return; // Exit the function
+                // Prevent default behavior (e.g., navigation)
+                event.preventDefault();
+
+                // Revert to the previous active tab.
+                // Force click of the previous tab.
+                document.getElementById(previousActiveTab).click();
+                return;
             }
         }
 
-        // Remove 'active' class from all links for to be unselected
+        // Remove 'active' class from all links to unselect them
         document.querySelectorAll('.nav-link').forEach(item => {
             item.classList.remove('active');
         });
 
         // Add 'active' class to the clicked link
         this.classList.add('active');
+
+        // Update the previous active tab
+        previousActiveTab = this.id;
     });
 });
 
+
 // Function to show the live reports on chart.
+// The first point will be coin.current_price and than its from an api
+// https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbols}&tsyms=${currency}
 function showLiveReports() {
 
     // Hide the search box.
@@ -462,7 +478,8 @@ async function updateChartData(chart) {
     }
 
     coinsArray.forEach((coin, index) => {
-        const currentPrice = priceData[coin.symbol.toUpperCase()]?.USD;  // Ensure USD is fetched correctly
+        // Ensure USD is fetched correctly
+        const currentPrice = priceData[coin.symbol.toUpperCase()]?.USD;  
 
         if (currentPrice) {
             const series = chart.options.data[index];
@@ -621,4 +638,9 @@ function displaySingleCoin(coin) {
 // Function to hide the search box.
 function hideSearch(){
     searchingBox.style.display = 'none';
+}
+
+// Function to show the search box again.
+function showSearch() {
+    searchingBox.style.display = 'block'; // Make sure the search box is visible again
 }
