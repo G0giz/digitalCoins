@@ -57,7 +57,9 @@ async function getAllCoins() {
 // Function to display coins with pagination.
 // Initiate the page to 1 in the beginning and in every page will be 12 cards.
 function displayCoins(coins, page = 1, coinsPerPage = 12) {
-
+    if (coins.length === 0) {
+        getCoins();
+    }
     // Calculate the total number of pages
     const totalPages = Math.ceil(coins.length / coinsPerPage);
 
@@ -192,7 +194,7 @@ async function addCoin(id) {
             showModal();
         }
     } catch (error) {
-        throw new Error("Error fetching coin:", error.message); 
+        throw new Error("Error fetching coin:", error.message);
     }
 
 }
@@ -278,24 +280,24 @@ function saveChanges() {
         // Event delegation for dynamically added elements
         $('body').on('click', '.btn-info', function () {
             // Get coin ID and name from data attributes
-            const coinId = $(this).data('id');  
-            const coinName = $(this).data('name');  
+            const coinId = $(this).data('id');
+            const coinName = $(this).data('name');
             // Call the flipCard function with appropriate arguments
-            flipCard(coinId, coinName);  
+            flipCard(coinId, coinName);
         });
 
         // Event listener for the Close Info button
         $('body').on('click', '.btn-secondary', function () {
             // Get coin ID from data-id attribute
-            const coinId = $(this).data('id');  
+            const coinId = $(this).data('id');
             // Call the unflipCard function
-            unflipCard(coinId);  
+            unflipCard(coinId);
         });
 
         // Save changes from the modal
         $('#saveChangesBtn').click(function () {
             // Call the saveChanges function
-            saveChanges();  
+            saveChanges();
         });
     });
 })();
@@ -322,7 +324,7 @@ async function flipCard(id, name) {
     // Add CSS for rotating spinner
     const spinner = document.querySelector(`#details-${id} .loading-spinner img`);
     // Apply rotation animation
-    spinner.style.animation = "spin 2s linear infinite"; 
+    spinner.style.animation = "spin 2s linear infinite";
 
     try {
 
@@ -333,6 +335,7 @@ async function flipCard(id, name) {
 
         // Get the current currency and get the value from the array of currencies.
         let currency = currencyBox.value.toLowerCase();
+
         // .toLocaleString() make it be readable like 1023405 = 1,023,405.
         currency = coin.market_data.current_price[currency].toLocaleString();
 
@@ -342,7 +345,7 @@ async function flipCard(id, name) {
         // If negative i want to set background color red else green.
         let priceChangeClass = priceChangePercent < 0 ? 'negative' : 'positive'
 
-        // Flip the card
+        // Add class to know that the card is flipped.
         card.classList.add('flipped');
 
         // Load additional data dynamically (e.g., fetch details)
@@ -407,15 +410,20 @@ function displayAbout() {
 }
 
 // Store the last active tab
-let previousActiveTab = "home"; // Default to "home" when the page loads
+// Default to "home" when the page loads
+let previousActiveTab = "home";
 
 // Add event to the links in the nav bar.
 document.querySelectorAll('.nav-link').forEach(link => {
+
     link.addEventListener('click', function (event) {
+
         // Check if the clicked link is the Live Reports tab.
         if (this.id === 'liveReports') {
+
             // Prevent the Live Reports tab from becoming active if coinsArray is empty
             if (coinsArray.length === 0) {
+                
                 // Prevent default behavior (e.g., navigation)
                 event.preventDefault();
 
@@ -505,7 +513,7 @@ async function updateChartData(chart) {
 
     coinsArray.forEach((coin, index) => {
         // Ensure USD is fetched correctly
-        const currentPrice = priceData[coin.symbol.toUpperCase()]?.USD;  
+        const currentPrice = priceData[coin.symbol.toUpperCase()]?.USD;
 
         if (currentPrice) {
             const series = chart.options.data[index];
@@ -545,13 +553,13 @@ async function fetchCoinPrices() {
         if (!response.ok) {
             throw new Error(`API error: ${response.statusText}`);
         }
-        const priceData = await response.json();   
+        const priceData = await response.json();
         // Return the fetched data     
-        return priceData; 
+        return priceData;
     } catch (error) {
         alert("Error fetching coin prices:", error.message);
         // Return null on error
-        return null; 
+        return null;
     }
 }
 
@@ -662,7 +670,7 @@ function displaySingleCoin(coin) {
 // -----------------------------------------------------------------------------------//
 
 // Function to hide the search box.
-function hideSearch(){
+function hideSearch() {
     searchingBox.style.display = 'none';
 }
 
